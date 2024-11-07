@@ -2,18 +2,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class TransmittingHealthValues : MonoBehaviour
+public abstract class HealthView : MonoBehaviour
 {
     [SerializeField] private Health _health;
-
-    protected TextMeshProUGUI _text;
-    protected Slider _slider;
-
-    private void Awake()
-    {
-        _text = GetComponent<TextMeshProUGUI>();
-        _slider = GetComponent<Slider>();
-    }
 
     private void OnEnable()
     {

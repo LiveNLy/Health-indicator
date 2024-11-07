@@ -4,9 +4,8 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float _healthValue = 150;
-    [SerializeField] private float _losedHealthByHit = 40f;
-    [SerializeField] private float _healFromMed = 20f;
     [SerializeField] private float _maxHealthValue = 150;
+
 
     public event Action<float, float> SendInfo;
 
@@ -15,29 +14,23 @@ public class Health : MonoBehaviour
         SendHealthInfo();
     }
 
-    public void LoseHealth()
+    public void LoseHealth(float damage)
     {
-        float damage = _losedHealthByHit;
-
-        if (_healthValue - _losedHealthByHit < 0)
+        if (_healthValue > 0 && damage > 0)
         {
-            damage = _healthValue;
+            _healthValue -= Mathf.Clamp(damage, 0, _healthValue);
         }
 
-            _healthValue -= damage;
-            SendHealthInfo();
+        SendHealthInfo();
     }
 
-    public void Heal()
+    public void Heal(float heal)
     {
-        float heal = _healFromMed;
-
-        if (_maxHealthValue - _healthValue < _healFromMed)
+        if (_healthValue < _maxHealthValue && heal > 0)
         {
-            heal = _maxHealthValue - _healthValue;
+            _healthValue += Mathf.Clamp(heal, 0, _maxHealthValue - _healthValue);
         }
 
-        _healthValue += heal;
         SendHealthInfo();
     }
 

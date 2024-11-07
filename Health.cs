@@ -4,8 +4,8 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float _health = 150;
-    [SerializeField] private HealButton _healButton;
-    [SerializeField] private DamageButton _damageButton;
+    [SerializeField] private HealthChangerButton _healButton;
+    [SerializeField] private HealthChangerButton _damageButton;
     [SerializeField] private float _losedHealthByHit = 40f;
     [SerializeField] private float _healFromMed = 20f;
 
@@ -18,8 +18,8 @@ public class Health : MonoBehaviour
 
     private void OnEnable()
     {
-        _healButton.HealPressed += Heal;
-        _damageButton.DamageGiven += LoseHealth;
+        _healButton.ParameterChanging += Heal;
+        _damageButton.ParameterChanging += LoseHealth;
     }
 
     private void FixedUpdate()
@@ -32,8 +32,8 @@ public class Health : MonoBehaviour
 
     private void OnDisable()
     {
-        _healButton.HealPressed -= Heal;
-        _damageButton.DamageGiven -= LoseHealth;
+        _healButton.ParameterChanging -= Heal;
+        _damageButton.ParameterChanging -= LoseHealth;
     }
 
     private void ResetHealth()
@@ -51,11 +51,6 @@ public class Health : MonoBehaviour
     {
         _health += _healFromMed;
         SendHealthInfo();
-    }
-
-    private void Death()
-    {
-        _health = 0;
     }
 
     private void SendHealthInfo()

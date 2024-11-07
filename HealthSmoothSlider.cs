@@ -2,10 +2,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthSmoothSlider : MonoBehaviour
+public class HealthSmoothSlider : TransmittingHealthValues
 {
-    [SerializeField] private Health _health;
-
     private Coroutine _coroutine;
     private Slider _healthSlider;
 
@@ -14,18 +12,12 @@ public class HealthSmoothSlider : MonoBehaviour
         _healthSlider = GetComponent<Slider>();
     }
 
-    private void OnEnable()
-    {
-        _health.SendInfo += ChangeHealth;
-    }
-
     private void OnDisable()
     {
-        StopAllCoroutines();
-        _health.SendInfo -= ChangeHealth;
+        StopCoroutine(_coroutine);
     }
 
-    private void ChangeHealth(float healthCount)
+    protected override void ShowHealth(float healthCount)
     {
         _coroutine = StartCoroutine(SmoothHealthChanging(healthCount));
     }

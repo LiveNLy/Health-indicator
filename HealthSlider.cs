@@ -2,10 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-public class HealthSlider : MonoBehaviour
+public class HealthSlider : TransmittingHealthValues
 {
-    [SerializeField] private Health _health;
-
     private Slider _healthSlider;
 
     private void Awake()
@@ -13,17 +11,7 @@ public class HealthSlider : MonoBehaviour
         _healthSlider = GetComponent<Slider>();
     }
 
-    private void OnEnable()
-    {
-        _health.SendInfo += ChangeHealth;
-    }
-
-    private void OnDisable()
-    {
-        _health.SendInfo -= ChangeHealth;
-    }
-
-    private void ChangeHealth(float healthCount)
+    protected override void ShowHealth(float healthCount)
     {
         _healthSlider.maxValue = _healthSlider.maxValue > healthCount ? _healthSlider.maxValue : healthCount;
         _healthSlider.value = healthCount;

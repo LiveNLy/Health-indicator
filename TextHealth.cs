@@ -1,15 +1,11 @@
 using TMPro;
 using UnityEngine;
 
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class TextHealth : TransmittingHealthValues
 {
-    [SerializeField] private TextMeshProUGUI _text;
-
-    private float _maxHealth = 100;
-
-    protected override void ShowHealth(float healthCount)
+    protected override void ShowHealth(float healthCount, float maxHealthValue)
     {
-        _maxHealth = _maxHealth > healthCount ? _maxHealth : healthCount;
-        _text.text = "Çהמנמגüו: " + healthCount + "/" + _maxHealth;
+        _text.text = "Çהמנמגüו: " + healthCount + "/" + maxHealthValue;
     }
 }

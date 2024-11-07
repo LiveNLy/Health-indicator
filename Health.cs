@@ -3,58 +3,46 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float _health = 150;
-    [SerializeField] private HealthChangerButton _healButton;
-    [SerializeField] private HealthChangerButton _damageButton;
+    [SerializeField] private float _healthValue = 150;
     [SerializeField] private float _losedHealthByHit = 40f;
     [SerializeField] private float _healFromMed = 20f;
+    [SerializeField] private float _maxHealthValue = 150;
 
-    public event Action<float> SendInfo;
+    public event Action<float, float> SendInfo;
 
     private void Awake()
     {
         SendHealthInfo();
     }
 
-    private void OnEnable()
+    public void LoseHealth()
     {
-        _healButton.ParameterChanging += Heal;
-        _damageButton.ParameterChanging += LoseHealth;
-    }
+        float damage = _losedHealthByHit;
 
-    private void FixedUpdate()
-    {
-        if (_health <= 0)
+        if (_healthValue - _losedHealthByHit < 0)
         {
-            ResetHealth();
+            damage = _healthValue;
         }
+
+            _healthValue -= damage;
+            SendHealthInfo();
     }
 
-    private void OnDisable()
+    public void Heal()
     {
-        _healButton.ParameterChanging -= Heal;
-        _damageButton.ParameterChanging -= LoseHealth;
-    }
+        float heal = _healFromMed;
 
-    private void ResetHealth()
-    {
-        _health = 150;
-    }
+        if (_maxHealthValue - _healthValue < _healFromMed)
+        {
+            heal = _maxHealthValue - _healthValue;
+        }
 
-    private void LoseHealth()
-    {
-        _health -= _losedHealthByHit;
-        SendHealthInfo();
-    }
-
-    private void Heal()
-    {
-        _health += _healFromMed;
+        _healthValue += heal;
         SendHealthInfo();
     }
 
     private void SendHealthInfo()
     {
-        SendInfo?.Invoke(_health);
+        SendInfo?.Invoke(_healthValue, _maxHealthValue);
     }
 }

@@ -1,12 +1,17 @@
-using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthChangerButton : MonoBehaviour
+[RequireComponent(typeof(Button))]
+public abstract class HealthChangerButton : MonoBehaviour
 {
-    [SerializeField] private Button _button;
+    [SerializeField] protected Health Health;
 
-    public event Action ParameterChanging;
+    private Button _button;
+
+    private void Awake()
+    {
+        _button = GetComponent<Button>();
+    }
 
     private void OnEnable()
     {
@@ -18,8 +23,5 @@ public class HealthChangerButton : MonoBehaviour
         _button.onClick.RemoveListener(ChangeParameter);
     }
 
-    private void ChangeParameter()
-    {
-        ParameterChanging.Invoke();
-    }
+    protected abstract void ChangeParameter();
 }
